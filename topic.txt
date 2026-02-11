@@ -1,1 +1,26 @@
-
+Problem: FIFO Cache Miss Calculation
+ 
+A virtual memory management system in an operating system uses a First-In-First-Out (FIFO) cache.
+ 
+When a requested memory page is not in the cache and the cache is full, the page that has been in the cache for the longest duration is removed to make room for the requested page. If the cache is not full, then the requested page can simply be added to the cache. A given page should occur at most once in the cache at most.
+ 
+Given the maximum size of the cache and an array of page requests, calculate the number of cache misses. A cache miss occurs when a page is requested but is not found in the cache. Initially, the cache is empty.
+ 
+ 
+ 
+Input
+ 
+The first line of the input consists of two space-separated positive integers  N  and  max_cache_size , representing the total number of pages and the size of the cache, respectively.
+The second line contains  N  space-separated positive integers representing the page requests for  n  pages.
+ 
+Output
+ 
+Print an integer representing the number of cache misses.
+ 
+Note
+ 
+Assume that the array  page_requests  contains pages numbered in the range 1-50. A page at a given index in the array is requested by the system.
+ 
+ 
+ 
+Would you like me to also provide the Java solution code for this problem?
