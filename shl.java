@@ -1,39 +1,35 @@
-def main():
+def calculate_group_id():
     import sys
     input = sys.stdin.read().split()
     n = int(input[0])
-    pfr = list(map(int, input[1:n+1]))
+    listPFR = list(map(int, input[1:n+1]))
     
-    # 预处理：对每个位置i，记录后面是否有比它小的数
-    has_smaller_after = [False] * n
-    min_so_far = pfr[-1]
-    for i in range(n-2, -1, -1):
-        if pfr[i] > min_so_far:
-            has_smaller_after[i] = True
-        min_so_far = min(min_so_far, pfr[i])
+    if n == 0:
+        print(0)
+        return
     
-    # 预处理：对每个位置i，记录后面是否有比它大的数
-    has_larger_after = [False] * n
-    max_so_far = pfr[-1]
+    right_max = [0] * n
+    right_min = [0] * n
+    
+    # 从右向左初始化最后一个元素
+    right_max[-1] = -float('inf')
+    right_min[-1] = float('inf')
+    
+    # 预处理右侧最大和最小值
     for i in range(n-2, -1, -1):
-        if pfr[i] < max_so_far:
-            has_larger_after[i] = True
-        max_so_far = max(max_so_far, pfr[i])
+        right_max[i] = max(listPFR[i+1], right_max[i+1])
+        right_min[i] = min(listPFR[i+1], right_min[i+1])
     
     total = 0
     for i in range(n):
-        if not has_larger_after[i]:
+        current = listPFR[i]
+        if current >= right_max[i]:
             total += 15
+        elif current < right_max[i] and current < right_min[i]:
+            total += 10
         else:
-            # 找到i后面第一个比它大的数的位置j
-            j = i + 1
-            while j < n and pfr[j] <= pfr[i]:
-                j += 1
-            if j < n and has_smaller_after[j]:
-                total += 5
-            else:
-                total += 10
+            total += 5
+    
     print(total)
 
-if __name__ == "__main__":
-    main()
+calculate_group_id()
