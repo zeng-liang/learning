@@ -1,29 +1,46 @@
-import java.io.*;
-import java.util.Arrays;
+import java.util.Scanner
 
-public class Main {
-    public static void main(String[] args) throws Exception {
-        FastScanner fs = new FastScanner(System.in);
-        int n = fs.nextInt();
-        int k = fs.nextInt();
-        int[] a = new int[n];
-        for (int i = 0; i < n; i++) a[i] = fs.nextInt();
-
-        if (k > 0) Arrays.sort(a, 0, k);
-        if (k < n) {
-            Arrays.sort(a, k, n);
-            // reverse subarray [k, n)
-            for (int i = k, j = n - 1; i < j; i++, j--) {
-                int t = a[i];
-                a[i] = a[j];
-                a[j] = t;
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            if (i > 0) sb.append(' ');
-            sb.append(a[i]);
-        }
-        System.out.println(sb.toString());
+fun main() {
+    val scanner = Scanner(System.`in`)
+    val n = scanner.nextInt()
+    val list = mutableListOf<Long>()
+    repeat(n) {
+        list.add(scanner.nextLong())
     }
+    scanner.close()
+
+    if (list.isEmpty()) {
+        return
+    }
+
+    var left = 0
+    var right = list.size - 1
+    var leftSum = list[left]
+    var rightSum = list[right]
+    val result = mutableListOf<Long>()
+
+    while (left < right) {
+        if (leftSum == rightSum) {
+            result.add(leftSum)
+            left++
+            right--
+            if (left <= right) {
+                leftSum = list[left]
+                rightSum = list[right]
+            }
+        } else if (leftSum < rightSum) {
+            left++
+            leftSum += list[left]
+        } else {
+            right--
+            rightSum += list[right]
+        }
+    }
+
+    if (left == right) {
+        result.add(list[left])
+    }
+
+    val palindrome = result + result.dropLast(1).reversed()
+    println(palindrome.joinToString(" "))
+}
