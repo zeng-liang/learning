@@ -1,35 +1,39 @@
-      import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Scanner;
+def main():
+    import sys
+    input = sys.stdin.read().split()
+    n = int(input[0])
+    pfr = list(map(int, input[1:n+1]))
+    
+    # 预处理：对每个位置i，记录后面是否有比它小的数
+    has_smaller_after = [False] * n
+    min_so_far = pfr[-1]
+    for i in range(n-2, -1, -1):
+        if pfr[i] > min_so_far:
+            has_smaller_after[i] = True
+        min_so_far = min(min_so_far, pfr[i])
+    
+    # 预处理：对每个位置i，记录后面是否有比它大的数
+    has_larger_after = [False] * n
+    max_so_far = pfr[-1]
+    for i in range(n-2, -1, -1):
+        if pfr[i] < max_so_far:
+            has_larger_after[i] = True
+        max_so_far = max(max_so_far, pfr[i])
+    
+    total = 0
+    for i in range(n):
+        if not has_larger_after[i]:
+            total += 15
+        else:
+            # 找到i后面第一个比它大的数的位置j
+            j = i + 1
+            while j < n and pfr[j] <= pfr[i]:
+                j += 1
+            if j < n and has_smaller_after[j]:
+                total += 5
+            else:
+                total += 10
+    print(total)
 
-class Solution {
-    public static void main(String args[]) throws IOException {
-        // 使用 BufferedReader 读取输入，处理大数据量更高效
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        // 读取列表大小
-        int size = Integer.parseInt(br.readLine());
-        
-        // 读取列表元素
-        String[] parts = br.readLine().split(" ");
-        int[] list = new int[size];
-        for (int i = 0; i < size; i++) {
-            list[i] = Integer.parseInt(parts[i]);
-        }
-        
-        // 对列表进行升序排序
-        Arrays.sort(list);
-        
-        // 输出交替元素（索引为 0, 2, 4...）
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < size; i += 2) {
-            if (i > 0) {
-                sb.append(" ");
-            }
-            sb.append(list[i]);
-        }
-        System.out.println(sb.toString());
-    }
-}
+if __name__ == "__main__":
+    main()
