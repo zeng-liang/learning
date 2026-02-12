@@ -20,29 +20,33 @@ fun main() {
     val result = mutableListOf<Long>()
 
     while (left < right) {
-        if (leftSum == rightSum) {
-            result.add(leftSum)
-            left++
-            right--
-            if (left <= right) {
-                leftSum = list[left]
-                rightSum = list[right]
+        when {
+            leftSum == rightSum -> {
+                result.add(leftSum)
+                left++
+                right--
+                if (left <= right) {
+                    leftSum = list[left]
+                    rightSum = list[right]
+                }
             }
-        } else if (leftSum < rightSum) {
-            left++
-            leftSum += list[left]
-        } else {
-            right--
-            rightSum += list[right]
+            leftSum < rightSum -> {
+                left++
+                leftSum += list[left]
+            }
+            else -> {
+                right--
+                rightSum += list[right]
+            }
         }
     }
 
-    // 关键修正：当左右指针相遇时，将最终的合并和（leftSum 或 rightSum）加入结果
+    // 当左右指针相遇时，将最终合并和加入结果
     if (left == right) {
         result.add(leftSum)
     }
 
-    // 构建回文
+    // 构建最终回文
     val palindrome = result + result.dropLast(1).reversed()
     println(palindrome.joinToString(" "))
 }
