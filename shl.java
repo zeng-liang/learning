@@ -1,35 +1,50 @@
-def calculate_group_id():
+def main():
     import sys
-    input = sys.stdin.read().split()
-    n = int(input[0])
-    listPFR = list(map(int, input[1:n+1]))
+    data = sys.stdin.read().split()
+    n = int(data[0])
+    pfr = map(int, data[1:n+1])
     
     if n == 0:
-        print(0)
+        print 0
         return
     
-    right_max = [0] * n
-    right_min = [0] * n
+    # 预处理：每个位置 i 后面是否有比它小的数
+    has_smaller_after = [False] * n
+    min_so_far = pfr[-1]
+    for i in xrange(n-2, -1, -1):
+        if pfr[i] > min_so_far:
+            has_smaller_after[i] = True
+        min_so_far = min(min_so_far, pfr[i])
     
-    # 从右向左初始化最后一个元素
-    right_max[-1] = -float('inf')
-    right_min[-1] = float('inf')
+    # 预处理：每个位置 i 后面是否有比它大的数
+    has_larger_after = [False] * n
+    max_so_far = pfr[-1]
+    for i in xrange(n-2, -1, -1):
+        if pfr[i] < max_so_far:
+            has_larger_after[i] = True
+        max_so_far = max(max_so_far, pfr[i])
     
-    # 预处理右侧最大和最小值
-    for i in range(n-2, -1, -1):
-        right_max[i] = max(listPFR[i+1], right_max[i+1])
-        right_min[i] = min(listPFR[i+1], right_min[i+1])
+    # 预处理：next_greater[i] = i 后面第一个比 pfr[i] 大的位置
+    next_greater = [-1] * n
+    stack = []
+    for i in xrange(n-1, -1, -1):
+        while stack and pfr[stack[-1]] <= pfr[i]:
+            stack.pop()
+        if stack:
+            next_greater[i] = stack[-1]
+        stack.append(i)
     
     total = 0
-    for i in range(n):
-        current = listPFR[i]
-        if current >= right_max[i]:
+    for i in xrange(n):
+        if not has_larger_after[i]:
             total += 15
-        elif current < right_max[i] and current < right_min[i]:
-            total += 10
         else:
-            total += 5
-    
-    print(total)
+            j = next_greater[i]
+            if j != -1 and has_smaller_after[j]:
+                total += 5
+            else:
+                total += 10
+    print total
 
-calculate_group_id()
+if __name__ == "__main__":
+    main()
