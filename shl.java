@@ -37,10 +37,12 @@ fun main() {
         }
     }
 
+    // 关键修正：当左右指针相遇时，将最终的合并和（leftSum 或 rightSum）加入结果
     if (left == right) {
-        result.add(list[left])
+        result.add(leftSum)
     }
 
+    // 构建回文
     val palindrome = result + result.dropLast(1).reversed()
     println(palindrome.joinToString(" "))
 }
